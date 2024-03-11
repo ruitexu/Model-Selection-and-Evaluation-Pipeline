@@ -82,3 +82,34 @@ plt.title('Model Comparison with Hyperparameter Tuning')
 plt.ylim(0, 1)
 plt.xticks(rotation=45, ha='right')
 plt.show()
+
+
+----------------------------------------------------------------------------------------------------------------
+
+#AutoML version
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from autosklearn.classification import AutoSklearnClassifier
+from sklearn.metrics import accuracy_score
+
+# Load a classification dataset (replace 'your_dataset.csv' with the actual dataset)
+df = pd.read_csv('your_dataset.csv')
+
+# Assume 'X' contains features and 'y' contains target variable
+X = df.drop('target', axis=1)
+y = df['target']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create and train an AutoML model using auto-sklearn
+automl_model = AutoSklearnClassifier(time_left_for_this_task=120, per_run_time_limit=30, seed=42)
+automl_model.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred_automl = automl_model.predict(X_test)
+
+# Evaluate the AutoML model
+accuracy_automl = accuracy_score(y_test, y_pred_automl)
+print(f'AutoML Model Accuracy: {accuracy_automl:.2f}')
